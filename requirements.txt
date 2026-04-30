@@ -1,0 +1,7 @@
+# Bedtime — Python dependencies
+# Install with: pip install -r requirements.txt
+
+PyYAML>=6.0
+questionary>=2.0
+rich>=13.0
+plyer>=2.1
