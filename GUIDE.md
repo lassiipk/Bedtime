@@ -294,9 +294,11 @@ bash teardown.sh
 
 ### What teardown does:
 1. Cancels and removes the scheduled task from your OS
-2. Deletes your `bedtime.config.yaml`
+2. **Asks you** whether to delete your config file (default is **keep it**)
 3. Asks if you want to uninstall the Python packages too
-4. Confirms everything is gone
+4. Confirms everything is done
+
+> **Tip:** If you say N to deleting the config, your settings are preserved. You can re-activate Bedtime at any time by running `python setup.py` again — no reconfiguring needed.
 
 **Teardown is safe to run multiple times.** If Bedtime is already removed, it just says "nothing found" and exits cleanly.
 
