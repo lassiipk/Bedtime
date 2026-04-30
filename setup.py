@@ -49,7 +49,7 @@ install_deps()
 from src.utils import print_banner, print_info, print_success, print_error, print_warning
 from src.config import load_config
 from src.scheduler import register_task, task_is_registered
-from src.utils import next_run_datetime, format_seconds, seconds_until
+from src.utils import next_run_datetime, format_until, seconds_until
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 print_banner()
@@ -97,7 +97,8 @@ try:
         date_str=sched.get("date", ""),
     )
     secs     = seconds_until(next_dt)
-    next_str = f"{next_dt.strftime('%Y-%m-%d %H:%M')} ({format_seconds(secs)} from now)"
+    day_name = next_dt.strftime("%A")
+    next_str = f"{next_dt.strftime('%Y-%m-%d %H:%M')} ({day_name}, {format_until(secs)})"
 except ValueError as e:
     print_error(f"Could not compute next run time: {e}")
     sys.exit(1)
