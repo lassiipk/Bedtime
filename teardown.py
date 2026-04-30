@@ -4,7 +4,7 @@ teardown.py — Bedtime teardown script (cross-platform).
 
 What this does:
   1. Removes Bedtime from the OS scheduler (cancels all tasks)
-  2. Deletes the config file(s)
+  2. Asks whether to keep or delete your config file
   3. Removes the skip flag if present
   4. Optionally uninstalls Bedtime dependencies
 
@@ -45,8 +45,8 @@ try:
 except Exception as e:
     print_warning(f"Could not remove task (may not exist): {e}")
 
-# ── 2. Delete config files ────────────────────────────────────────────────────
-print_info("\nStep 2: Deleting config files...")
+# ── 2. Config file — ask the user ─────────────────────────────────────────────
+print()
 config_names = [
     "bedtime.config.yaml",
     "bedtime.config.yml",
@@ -54,16 +54,29 @@ config_names = [
     "bedtime.config.ini",
     "bedtime.config",
 ]
-for name in config_names:
-    p = ROOT / name
-    if p.exists():
-        p.unlink()
-        print_success(f"Deleted: {p}")
-        anything_removed = True
+found_configs = [ROOT / name for name in config_names if (ROOT / name).exists()]
 
-if not any((ROOT / n).exists() for n in config_names):
-    if not anything_removed:
-        print_warning("No config files found.")
+if found_configs:
+    print_info("Step 2: Config file(s) found:")
+    for p in found_configs:
+        print(f"         • {p.name}")
+    print()
+    print("  Your config has your scheduled time, action, and warning settings.")
+    print("  If you keep it, you can re-activate Bedtime later by running setup.py.")
+    print()
+    delete_config = input(
+        "  Delete config file(s)? [y/N]: "
+    ).strip().lower()
+
+    if delete_config in ("y", "yes"):
+        for p in found_configs:
+            p.unlink()
+            print_success(f"Deleted: {p.name}")
+        anything_removed = True
+    else:
+        print_success("Config file(s) kept. Re-activate anytime with: python setup.py")
+else:
+    print_info("Step 2: No config files found. Skipping.")
 
 # ── 3. Remove skip flag ───────────────────────────────────────────────────────
 skip_file = ROOT / ".bedtime_skip"
