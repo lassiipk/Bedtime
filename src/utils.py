@@ -33,7 +33,7 @@ def require_os(*allowed):
 # ── Time helpers ──────────────────────────────────────────────────────────────
 
 def format_seconds(seconds: int) -> str:
-    """Turn seconds into a human-readable string: '5 minutes', '1 minute', '30 seconds'."""
+    """Turn seconds into a human-readable string for short countdown intervals."""
     if seconds >= 120:
         mins = seconds // 60
         return f"{mins} minutes"
@@ -43,6 +43,33 @@ def format_seconds(seconds: int) -> str:
         return f"{seconds} seconds"
     else:
         return "1 second"
+
+
+def format_until(seconds: int) -> str:
+    """Turn a potentially large seconds value into a friendly 'time until' string.
+    E.g. 86399 -> 'tomorrow (23 hours 59 minutes)', 3661 -> 'in 1 hour 1 minute'."""
+    if seconds <= 0:
+        return "now"
+    elif seconds < 60:
+        return f"in {seconds} second{'s' if seconds != 1 else ''}"
+    elif seconds < 3600:
+        mins = seconds // 60
+        return f"in {mins} minute{'s' if mins != 1 else ''}"
+    elif seconds < 82800:  # under 23 hours — show as hours/minutes
+        hours = seconds // 3600
+        mins  = (seconds % 3600) // 60
+        parts = [f"{hours} hour{'s' if hours != 1 else ''}"]
+        if mins:
+            parts.append(f"{mins} minute{'s' if mins != 1 else ''}")
+        return "in " + " ".join(parts)
+    else:
+        # 23 hours or more — show as "tomorrow" or "in N days"
+        days  = seconds // 86400
+        hours = (seconds % 86400) // 3600
+        label = "tomorrow" if days <= 1 else f"in {days} days"
+        if hours and days >= 1:
+            return f"{label} ({hours} hour{'s' if hours != 1 else ''} from now)"
+        return label
 
 
 def next_run_datetime(time_str: str, mode: str, days: list, date_str: str) -> datetime:

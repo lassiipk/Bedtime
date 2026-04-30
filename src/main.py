@@ -59,10 +59,11 @@ def cmd_run():
         sys.exit(1)
 
     secs = seconds_until(target_dt)
+    from src.utils import format_until
     print_info(
         f"Action [{action_cfg['action']}] scheduled for "
         f"{target_dt.strftime('%Y-%m-%d %H:%M')} "
-        f"({secs}s from now)"
+        f"({format_until(secs)})"
     )
 
     # Run the warning countdown
@@ -80,7 +81,7 @@ def cmd_run():
 def cmd_status():
     """Show the current schedule and next run time."""
     from src.config import load_config
-    from src.utils import next_run_datetime, format_seconds, seconds_until
+    from src.utils import next_run_datetime, format_until, seconds_until
     from src.scheduler import task_is_registered
     from datetime import datetime
 
@@ -105,7 +106,8 @@ def cmd_status():
             date_str=sched.get("date", ""),
         )
         secs = seconds_until(next_dt)
-        next_str = f"{next_dt.strftime('%Y-%m-%d %H:%M')}  ({format_seconds(secs)} from now)"
+        day_name = next_dt.strftime("%A")  # e.g. "Thursday"
+        next_str = f"{next_dt.strftime('%Y-%m-%d %H:%M')}  ({day_name}, {format_until(secs)})"
     except ValueError as e:
         next_str = f"Could not compute: {e}"
 
