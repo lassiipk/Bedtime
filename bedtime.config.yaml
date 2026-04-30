@@ -1,0 +1,75 @@
+# ============================================================
+#  Bedtime Configuration File
+#  Edit this file to customize your scheduled actions.
+#  Run `python setup.py` after making changes.
+# ============================================================
+
+schedule:
+  # Time to run the action. Format: HH:MM (24-hour) or HH:MM AM/PM
+  time: "22:00"
+
+  # Mode: "daily" = every day (or specific days), "once" = run one time only
+  mode: daily
+
+  # Days to run (only used when mode is "daily")
+  # Options: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+  days:
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    - Sun
+
+  # Date for one-time run (only used when mode is "once"). Format: YYYY-MM-DD
+  date: ""
+
+action:
+  # What to do when the time comes.
+  # Options: shutdown, restart, sleep, logoff, lock, custom
+  action: shutdown
+
+  # Required only when action is "custom". The command to run.
+  custom_command: ""
+
+warnings:
+  # Set to false to disable all warnings
+  enabled: true
+
+  # Seconds before the action to send each warning.
+  # Example: [300, 60, 5] means warn at 5 min, 1 min, and 5 sec before action.
+  intervals:
+    - 300
+    - 60
+    - 5
+
+  # Warning message template.
+  # Placeholders: {action}, {time_left}, {time}
+  message: "Your PC will {action} in {time_left}. Please save your work!"
+
+notifications:
+  # Show a GUI pop-up notification
+  popup: true
+
+  # Print warning to terminal
+  terminal: true
+
+  # Play a sound alert
+  sound: true
+
+  # Path to a custom .wav or .mp3 file. Leave empty to use the system beep.
+  sound_file: ""
+
+control:
+  # Allow the user to cancel the action during the countdown
+  allow_cancel: true
+
+  # Allow the user to snooze the action during the countdown
+  allow_snooze: true
+
+  # How many seconds to delay when snoozing
+  snooze_duration: 300
+
+  # Maximum number of times the user can snooze
+  max_snoozes: 3
